@@ -376,31 +376,21 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
       children: [
         Expanded(
           child: _StockActionButton(
-            label: 'Kurang',
-            icon: Icons.remove,
+            label: 'Catat Penjualan',
+            icon: Icons.point_of_sale,
             color: AppTheme.errorRed,
             isEnabled: _barang.stok > 0,
-            onTap: () => _quickUpdateStock(-1),
+            onTap: () => _showSalesInputDialog(),
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: _StockActionButton(
-            label: 'Tambah',
-            icon: Icons.add,
+            label: 'Tambah Stok',
+            icon: Icons.add_shopping_cart,
             color: AppTheme.successGreen,
             isEnabled: true,
-            onTap: () => _quickUpdateStock(1),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: _StockActionButton(
-            label: 'Edit',
-            icon: Icons.edit,
-            color: AppTheme.primaryPink,
-            isEnabled: true,
-            onTap: () => _showStockEditDialog(),
+            onTap: () => _showAddStockDialog(),
           ),
         ),
       ],
@@ -441,86 +431,355 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
     ).animate().fadeIn(delay: 500.ms);
   }
 
-  void _quickUpdateStock(int delta) async {
-    final barangProvider = context.read<BarangProvider>();
-    final success = await barangProvider.updateStok(_barang, delta);
-
-    if (success) {
-      _refreshBarang();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              delta > 0 ? '✅ Stok bertambah!' : '📦 Stok berkurang',
-            ),
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 1),
-          ),
-        );
-      }
-    }
-  }
-
-  void _showStockEditDialog() {
-    final controller = TextEditingController(text: _barang.stok.toString());
+  /// Dialog untuk catat penjualan - input sisa stok sekarang
+  void _showSalesInputDialog() {
+    final controller = TextEditingController();
     final theme = Theme.of(context);
+    int sisaStok = _barang.stok;
+    int terjual = 0;
+    int totalPendapatan = 0;
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            const Text('📦 ', style: TextStyle(fontSize: 24)),
-            Text('Edit Stok', style: theme.textTheme.titleLarge),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(_barang.nama, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 16),
-            TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: 'Jumlah stok',
-                suffixText: _barang.satuan,
-                prefixIcon: const Icon(Icons.inventory_2_outlined),
-              ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              autofocus: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          void updateCalculation() {
+            final input = int.tryParse(controller.text);
+            if (input != null && input >= 0 && input <= _barang.stok) {
+              setDialogState(() {
+                sisaStok = input;
+                terjual = _barang.stok - input;
+                totalPendapatan = terjual * _barang.harga;
+              });
+            } else {
+              setDialogState(() {
+                sisaStok = _barang.stok;
+                terjual = 0;
+                totalPendapatan = 0;
+              });
+            }
+          }
+
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Text('💰 ', style: TextStyle(fontSize: 24)),
+                Text('Catat Penjualan', style: theme.textTheme.titleLarge),
+              ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final newStok = int.tryParse(controller.text) ?? _barang.stok;
-              final delta = newStok - _barang.stok;
-
-              if (delta != 0) {
-                final barangProvider = context.read<BarangProvider>();
-                await barangProvider.updateStok(_barang, delta, isAudit: true);
-                _refreshBarang();
-              }
-
-              if (context.mounted) {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('✅ Stok berhasil diupdate!'),
-                    behavior: SnackBarBehavior.floating,
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(_barang.nama, style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.lightPink.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Stok saat ini: '),
+                        Text(
+                          '${_barang.stok} ${_barang.satuan}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                   ),
-                );
-              }
-            },
-            child: const Text('Simpan'),
-          ),
-        ],
+                  const SizedBox(height: 16),
+                  Text(
+                    'Sisa berapa stok sekarang?',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: 'Masukkan sisa stok',
+                      suffixText: _barang.satuan,
+                      prefixIcon: const Icon(Icons.inventory_2_outlined),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    autofocus: true,
+                    onChanged: (_) => updateCalculation(),
+                  ),
+                  const SizedBox(height: 16),
+                  // Hasil kalkulasi
+                  if (terjual > 0) ...[
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppTheme.successGreen.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.successGreen.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Terjual:'),
+                              Text(
+                                '$terjual ${_barang.satuan}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.successGreen,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          const Divider(),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Total Pendapatan:'),
+                              Text(
+                                CurrencyFormatter.format(totalPendapatan),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.primaryPink,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (controller.text.isNotEmpty && terjual == 0) ...[
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        'Tidak ada perubahan stok',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Batal'),
+              ),
+              ElevatedButton(
+                onPressed: terjual > 0
+                    ? () async {
+                        final barangProvider = context.read<BarangProvider>();
+                        await barangProvider.updateStok(
+                          _barang,
+                          -terjual,
+                          catatan:
+                              'Terjual $terjual, sisa $sisaStok. Pendapatan: ${CurrencyFormatter.format(totalPendapatan)}',
+                        );
+                        _refreshBarang();
+
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '✅ Penjualan tercatat! Terjual $terjual ${_barang.satuan} = ${CurrencyFormatter.format(totalPendapatan)}',
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }
+                    : null,
+                child: const Text('Simpan'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  /// Dialog untuk tambah stok - input jumlah yang ditambahkan
+  void _showAddStockDialog() {
+    final controller = TextEditingController();
+    final theme = Theme.of(context);
+    int tambah = 0;
+    int stokBaru = _barang.stok;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          void updateCalculation() {
+            final input = int.tryParse(controller.text);
+            if (input != null && input > 0) {
+              // Prevent overflow
+              final maxAdd = 999999 - _barang.stok;
+              setDialogState(() {
+                tambah = input > maxAdd ? maxAdd : input;
+                stokBaru = _barang.stok + tambah;
+              });
+            } else {
+              setDialogState(() {
+                tambah = 0;
+                stokBaru = _barang.stok;
+              });
+            }
+          }
+
+          return AlertDialog(
+            title: Row(
+              children: [
+                const Text('📦 ', style: TextStyle(fontSize: 24)),
+                Text('Tambah Stok', style: theme.textTheme.titleLarge),
+              ],
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(_barang.nama, style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.lightPink.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Stok saat ini: '),
+                        Text(
+                          '${_barang.stok} ${_barang.satuan}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Mau tambah berapa?',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: 'Jumlah yang ditambahkan',
+                      suffixText: _barang.satuan,
+                      prefixIcon: const Icon(Icons.add_circle_outline),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    autofocus: true,
+                    onChanged: (_) => updateCalculation(),
+                  ),
+                  const SizedBox(height: 16),
+                  if (tambah > 0) ...[
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppTheme.successGreen.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppTheme.successGreen.withOpacity(0.3),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Ditambahkan:'),
+                              Text(
+                                '+$tambah ${_barang.satuan}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.successGreen,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          const Divider(),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text('Stok baru:'),
+                              Text(
+                                '$stokBaru ${_barang.satuan}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.primaryPink,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Batal'),
+              ),
+              ElevatedButton(
+                onPressed: tambah > 0
+                    ? () async {
+                        final barangProvider = context.read<BarangProvider>();
+                        await barangProvider.updateStok(
+                          _barang,
+                          tambah,
+                          catatan: 'Tambah stok +$tambah, total $stokBaru',
+                        );
+                        _refreshBarang();
+
+                        if (context.mounted) {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '✅ Stok bertambah +$tambah ${_barang.satuan}. Total: $stokBaru',
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }
+                    : null,
+                child: const Text('Simpan'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

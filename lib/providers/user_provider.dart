@@ -32,7 +32,14 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> createUser(String nama, {String? pin, String? fotoPath}) async {
+  Future<bool> createUser(
+    String nama, {
+    String? pin,
+    String? fotoPath,
+    String? firebaseUid,
+    String? email,
+    String? phoneNumber,
+  }) async {
     try {
       final now = DateTime.now();
       final user = User(
@@ -40,6 +47,9 @@ class UserProvider extends ChangeNotifier {
         nama: nama,
         pin: pin,
         fotoPath: fotoPath,
+        firebaseUid: firebaseUid,
+        email: email,
+        phoneNumber: phoneNumber,
         createdAt: now,
         lastLogin: now,
       );

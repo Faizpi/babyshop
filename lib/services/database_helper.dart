@@ -33,7 +33,21 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+      path,
+      version: 2,
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+    );
+  }
+
+  Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Add Firebase fields to users table
+      await db.execute('ALTER TABLE users ADD COLUMN firebase_uid TEXT');
+      await db.execute('ALTER TABLE users ADD COLUMN email TEXT');
+      await db.execute('ALTER TABLE users ADD COLUMN phone_number TEXT');
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -44,6 +58,9 @@ class DatabaseHelper {
         nama TEXT NOT NULL,
         pin TEXT,
         foto_path TEXT,
+        firebase_uid TEXT,
+        email TEXT,
+        phone_number TEXT,
         created_at TEXT NOT NULL,
         last_login TEXT
       )
@@ -449,6 +466,20 @@ class DatabaseHelper {
     return maps.map((map) => Barang.fromMap(map)).toList();
   }
 
+  Future<List<Barang>> getBarangNeedingSync() async {
+    return getBarangNeedsSync();
+  }
+
+  Future<List<Riwayat>> getRiwayatNeedingSync() async {
+    final db = await database;
+    final maps = await db.query(
+      'riwayat',
+      where: 'needs_sync = ?',
+      whereArgs: [1],
+    );
+    return maps.map((map) => Riwayat.fromMap(map)).toList();
+  }
+
   Future<void> markBarangSynced(String id) async {
     final db = await database;
     await db.update(
@@ -457,6 +488,12 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<void> markAllAsSynced() async {
+    final db = await database;
+    await db.update('barang', {'needs_sync': 0});
+    await db.update('riwayat', {'needs_sync': 0});
   }
 
   // ==================== EXPORT ====================

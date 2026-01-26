@@ -4,7 +4,9 @@ import '../utils/app_icons.dart';
 import 'package:provider/provider.dart';
 import '../providers/providers.dart';
 import '../utils/app_theme.dart';
+import '../main.dart' show isFirebaseInitialized;
 import 'home_screen.dart';
+import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,7 +30,12 @@ class _SplashScreenState extends State<SplashScreen> {
       // Load theme
       await context.read<ThemeProvider>().loadTheme();
 
-      // Check user status
+      // Check Firebase auth status (only if Firebase is initialized)
+      if (isFirebaseInitialized) {
+        await context.read<AuthProvider>().checkAuthStatus();
+      }
+
+      // Check local user status
       await context.read<UserProvider>().checkLoginStatus();
 
       // Load warung list
@@ -43,14 +50,41 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         final userProvider = context.read<UserProvider>();
 
-        if (userProvider.currentUser == null) {
-          // Navigate to onboarding
+        // If Firebase is not initialized, use offline mode (check local user only)
+        if (!isFirebaseInitialized) {
+          if (userProvider.currentUser == null) {
+            // No local user - go to onboarding
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+            );
+          } else {
+            // Has local user - go to home
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HomeScreen()),
+            );
+          }
+          return;
+        }
+
+        // Firebase is initialized - check auth
+        final authProvider = context.read<AuthProvider>();
+
+        if (!authProvider.isLoggedIn) {
+          // Not authenticated with Firebase - go to login
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+          );
+        } else if (userProvider.currentUser == null) {
+          // Authenticated but no local user - setup warung
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const PostRegisterSetupScreen()),
           );
         } else {
-          // Navigate to home
+          // Fully authenticated - go to home
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -59,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     } catch (e) {
       debugPrint('Initialization error: $e');
-      // Navigate to onboarding on error
+      // Navigate to onboarding on error (offline mode)
       if (mounted) {
         Navigator.pushReplacement(
           context,
@@ -88,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ClipRRect(
                     borderRadius: BorderRadius.circular(30),
                     child: Image.asset(
-                      'assets/images/splashamara.png',
+                      'assets/images/logoamara.png',
                       width: 180,
                       height: 180,
                       fit: BoxFit.contain,

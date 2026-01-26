@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "304356168465",
+    "project_id": "warungku-amara",
+    "storage_bucket": "warungku-amara.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:304356168465:android:1ffa8edcdbe981eeccf2b0",
+        "android_client_info": {
+          "package_name": "com.warungku.warungku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDqDboDsqIG9qmuBSPkdPOOFaLdnQvWdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
