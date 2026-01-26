@@ -9,6 +9,7 @@ import 'barang_list_screen.dart';
 import 'tambah_barang_screen.dart';
 import 'riwayat_screen.dart';
 import 'settings_screen.dart';
+import 'detail_barang_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +20,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+
+  // Public method to switch tabs from child widgets
+  void switchToTab(int index) {
+    setState(() => _currentIndex = index);
+  }
 
   @override
   void initState() {
@@ -301,8 +307,9 @@ class DashboardTab extends StatelessWidget {
                       const Spacer(),
                       TextButton(
                         onPressed: () {
-                          // Navigate to barang list (tab 1) using Navigator
-                          Navigator.pushNamed(context, '/barang');
+                          // Switch to Barang tab
+                          final homeState = context.findAncestorStateOfType<_HomeScreenState>();
+                          homeState?.switchToTab(1);
                         },
                         child: const Text('Lihat Semua'),
                       ),
@@ -353,8 +360,15 @@ class DashboardTab extends StatelessWidget {
                         return BarangCard(
                           barang: barang,
                           kategori: kategori,
-                          onTambahStok: () => _updateStok(context, barang, 1),
-                          onKurangStok: () => _updateStok(context, barang, -1),
+                          showActions: false,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => DetailBarangScreen(barang: barang),
+                              ),
+                            );
+                          },
                         );
                       },
                       childCount: barangProvider.allBarangList.length > 6

@@ -12,7 +12,20 @@
           "package_name": "com.warungku.warungku"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "304356168465-ad0uumjm7b4unip4fefjsakisiq3eann.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.warungku.warungku",
+            "certificate_hash": "4bfa6c10ad4020631b9ebab37e2671dfaf7aacd5"
+          }
+        },
+        {
+          "client_id": "304356168465-vvblpbisl9m61q0uf89rghuvnonaba58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCDqDboDsqIG9qmuBSPkdPOOFaLdnQvWdg"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "304356168465-vvblpbisl9m61q0uf89rghuvnonaba58.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

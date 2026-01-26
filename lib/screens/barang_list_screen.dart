@@ -5,7 +5,6 @@ import '../providers/providers.dart';
 import '../models/models.dart';
 import '../widgets/widgets.dart';
 import '../utils/app_theme.dart';
-import '../utils/app_icons.dart';
 import 'detail_barang_screen.dart';
 import 'tambah_barang_screen.dart';
 
@@ -153,8 +152,7 @@ class _BarangListScreenState extends State<BarangListScreen> {
             barang: barang,
             kategori: kategori,
             onTap: () => _navigateToDetail(barang),
-            onTambahStok: () => _updateStok(barang, 1),
-            onKurangStok: () => _updateStok(barang, -1),
+            showActions: false,
           );
         },
       ),
@@ -262,25 +260,6 @@ class _BarangListScreenState extends State<BarangListScreen> {
           warungProvider.selectedWarung!.id,
         );
       }
-    }
-  }
-
-  void _updateStok(Barang barang, int delta) async {
-    final barangProvider = context.read<BarangProvider>();
-    final success = await barangProvider.updateStok(barang, delta);
-
-    if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            delta > 0
-                ? '✅ Stok ${barang.nama} bertambah!'
-                : '📦 Stok ${barang.nama} berkurang',
-          ),
-          behavior: SnackBarBehavior.floating,
-          duration: const Duration(seconds: 1),
-        ),
-      );
     }
   }
 }

@@ -26,8 +26,8 @@
 
 <div align="center">
 
-| 🚀 Cepat | 🔒 Aman | ☁️ Cloud Sync | 📱 User-Friendly |
-|:--------:|:-------:|:-------------:|:----------------:|
+|               🚀 Cepat               |              🔒 Aman               |     ☁️ Cloud Sync     |    📱 User-Friendly     |
+| :----------------------------------: | :--------------------------------: | :-------------------: | :---------------------: |
 | Performa optimal dengan SQLite lokal | Data terenkripsi & backup otomatis | Pindah HP? Data ikut! | UI/UX modern & intuitif |
 
 </div>
@@ -37,52 +37,58 @@
 ## ✨ Fitur Lengkap
 
 ### 📦 **Manajemen Inventaris**
-| Fitur | Deskripsi |
-|-------|-----------|
-| ➕ **CRUD Barang** | Tambah, edit, hapus produk dengan mudah |
-| 📸 **Photo Picker** | Ambil foto barang dari kamera atau galeri |
-| 🏷️ **Kategori Fleksibel** | 8+ kategori produk perlengkapan bayi |
-| 🔔 **Notifikasi Stok** | Peringatan otomatis saat stok menipis |
-| 🔍 **Pencarian Cerdas** | Filter berdasarkan nama, kategori, atau warung |
+
+| Fitur                     | Deskripsi                                      |
+| ------------------------- | ---------------------------------------------- |
+| ➕ **CRUD Barang**        | Tambah, edit, hapus produk dengan mudah        |
+| 📸 **Photo Picker**       | Ambil foto barang dari kamera atau galeri      |
+| 🏷️ **Kategori Fleksibel** | 8+ kategori produk perlengkapan bayi           |
+| 🔔 **Notifikasi Stok**    | Peringatan otomatis saat stok menipis          |
+| 🔍 **Pencarian Cerdas**   | Filter berdasarkan nama, kategori, atau warung |
 
 ### 💰 **Manajemen Penjualan**
-| Fitur | Deskripsi |
-|-------|-----------|
-| 📝 **Catat Penjualan** | Input "Sisa stok berapa?" → otomatis hitung laku |
-| 💵 **Kalkulasi Otomatis** | Total pendapatan dihitung secara real-time |
-| ➕ **Tambah Stok** | Restok barang dengan catatan otomatis |
-| 📊 **Riwayat Lengkap** | Histori semua transaksi masuk/keluar |
+
+| Fitur                     | Deskripsi                                        |
+| ------------------------- | ------------------------------------------------ |
+| 📝 **Catat Penjualan**    | Input "Sisa stok berapa?" → otomatis hitung laku |
+| 💵 **Kalkulasi Otomatis** | Total pendapatan dihitung secara real-time       |
+| ➕ **Tambah Stok**        | Restok barang dengan catatan otomatis            |
+| 📊 **Riwayat Lengkap**    | Histori semua transaksi masuk/keluar             |
 
 ### 🏪 **Multi-Warung Support**
-| Fitur | Deskripsi |
-|-------|-----------|
-| 🏬 **Banyak Toko** | Kelola beberapa warung dalam satu aplikasi |
-| 🔄 **Switch Warung** | Pindah antar warung dengan sekali tap |
-| 📈 **Dashboard Per-Warung** | Statistik terpisah untuk setiap toko |
+
+| Fitur                       | Deskripsi                                  |
+| --------------------------- | ------------------------------------------ |
+| 🏬 **Banyak Toko**          | Kelola beberapa warung dalam satu aplikasi |
+| 🔄 **Switch Warung**        | Pindah antar warung dengan sekali tap      |
+| 📈 **Dashboard Per-Warung** | Statistik terpisah untuk setiap toko       |
 
 ### 🔐 **Autentikasi & Keamanan**
-| Fitur | Deskripsi |
-|-------|-----------|
+
+| Fitur                   | Deskripsi                       |
+| ----------------------- | ------------------------------- |
 | 📧 **Email & Password** | Login dengan email dan password |
-| 📱 **Phone OTP** | Verifikasi via nomor telepon |
-| 🔵 **Google Sign-In** | Login cepat dengan akun Google |
-| 👤 **Profil Pengguna** | Kelola informasi akun Anda |
+| 📱 **Phone OTP**        | Verifikasi via nomor telepon    |
+| 🔵 **Google Sign-In**   | Login cepat dengan akun Google  |
+| 👤 **Profil Pengguna**  | Kelola informasi akun Anda      |
 
 ### ☁️ **Cloud Sync & Backup**
-| Fitur | Deskripsi |
-|-------|-----------|
-| 🔄 **Offline-First** | Bekerja tanpa internet, sync saat online |
-| ☁️ **Firebase Firestore** | Data tersimpan aman di cloud |
-| 📲 **Ganti HP?** | Login di device baru, data otomatis tersinkron |
-| 🔒 **Secure Rules** | Data hanya bisa diakses pemilik akun |
+
+| Fitur                     | Deskripsi                                      |
+| ------------------------- | ---------------------------------------------- |
+| 🔄 **Offline-First**      | Bekerja tanpa internet, sync saat online       |
+| ☁️ **Firebase Firestore** | Data tersimpan aman di cloud                   |
+| 📲 **Ganti HP?**          | Login di device baru, data otomatis tersinkron |
+| 🔒 **Secure Rules**       | Data hanya bisa diakses pemilik akun           |
 
 ### 🎨 **UI/UX Modern**
-| Fitur | Deskripsi |
-|-------|-----------|
-| 🌙 **Dark Mode** | Tema gelap untuk kenyamanan mata |
-| ✨ **Animasi Smooth** | Transisi halus dengan Flutter Animate |
-| 🎯 **Material Design 3** | Desain modern mengikuti standar terbaru |
-| 📱 **Responsive** | Tampilan optimal di berbagai ukuran layar |
+
+| Fitur                    | Deskripsi                                 |
+| ------------------------ | ----------------------------------------- |
+| 🌙 **Dark Mode**         | Tema gelap untuk kenyamanan mata          |
+| ✨ **Animasi Smooth**    | Transisi halus dengan Flutter Animate     |
+| 🎯 **Material Design 3** | Desain modern mengikuti standar terbaru   |
+| 📱 **Responsive**        | Tampilan optimal di berbagai ukuran layar |
 
 ---
 
@@ -90,8 +96,8 @@
 
 <div align="center">
 
-| 👶 Pakaian Bayi | 🍼 Susu & Makanan | 🧴 Perawatan | 🧸 Mainan |
-|:---------------:|:-----------------:|:------------:|:---------:|
+|      👶 Pakaian Bayi      |     🍼 Susu & Makanan     |   🧴 Perawatan    |   🧸 Mainan    |
+| :-----------------------: | :-----------------------: | :---------------: | :------------: |
 | 🛏️ **Perlengkapan Tidur** | 🚗 **Perlengkapan Jalan** | 🧹 **Kebersihan** | 📦 **Lainnya** |
 
 </div>
@@ -102,16 +108,16 @@
 
 <div align="center">
 
-| Layer | Teknologi |
-|:-----:|:---------:|
-| **Frontend** | Flutter 3.9.2, Dart 3.9 |
-| **State Management** | Provider |
-| **Local Database** | SQLite (sqflite) |
-| **Cloud Backend** | Firebase (Auth, Firestore) |
-| **Authentication** | Email, Phone OTP, Google Sign-In |
-| **Connectivity** | connectivity_plus |
-| **UI/Animation** | Flutter Animate, Google Fonts |
-| **Image Handling** | Image Picker, path_provider |
+|        Layer         |            Teknologi             |
+| :------------------: | :------------------------------: |
+|     **Frontend**     |     Flutter 3.9.2, Dart 3.9      |
+| **State Management** |             Provider             |
+|  **Local Database**  |         SQLite (sqflite)         |
+|  **Cloud Backend**   |    Firebase (Auth, Firestore)    |
+|  **Authentication**  | Email, Phone OTP, Google Sign-In |
+|   **Connectivity**   |        connectivity_plus         |
+|   **UI/Animation**   |  Flutter Animate, Google Fonts   |
+|  **Image Handling**  |   Image Picker, path_provider    |
 
 </div>
 
@@ -178,6 +184,7 @@ lib/
 ## 🚀 Instalasi & Setup
 
 ### 📋 Prasyarat
+
 - Flutter SDK >= 3.9.2
 - Dart >= 3.9
 - Android Studio / VS Code
@@ -227,16 +234,16 @@ APK tersedia di: `build/app/outputs/flutter-apk/app-release.apk`
 
 <div align="center">
 
-| Splash Screen | Login | Dashboard |
-|:-------------:|:-----:|:---------:|
+|   Splash Screen    |       Login       |      Dashboard      |
+| :----------------: | :---------------: | :-----------------: |
 | Branding & loading | Multi-method auth | Statistik real-time |
 
-| Daftar Barang | Detail & Stok | Catat Penjualan |
-|:-------------:|:-------------:|:---------------:|
+|   Daftar Barang    |    Detail & Stok    |     Catat Penjualan      |
+| :----------------: | :-----------------: | :----------------------: |
 | Grid view + filter | Info lengkap produk | Input sisa → hitung laku |
 
-| Riwayat | Pengaturan | Multi-Warung |
-|:-------:|:----------:|:------------:|
+|      Riwayat      |     Pengaturan     |   Multi-Warung    |
+| :---------------: | :----------------: | :---------------: |
 | Histori transaksi | Dark mode & profil | Switch antar toko |
 
 </div>

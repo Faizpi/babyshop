@@ -436,12 +436,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() => _isLoading = false);
 
       if (result.isSuccess) {
-        // Navigate to onboarding to create warung
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const PostRegisterSetupScreen()),
-          (route) => false,
-        );
+        // Logout and go back to login page
+        await context.read<AuthProvider>().signOut();
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('✅ Akun berhasil dibuat! Silakan login.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (route) => false,
+          );
+        }
       } else {
         setState(() => _errorMessage = result.errorMessage);
       }
