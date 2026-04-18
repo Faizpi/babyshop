@@ -155,6 +155,8 @@ class _WarungTile extends StatelessWidget {
                           : FontWeight.w500,
                       color: isSelected ? AppTheme.primaryPink : null,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   if (warung.alamat != null && warung.alamat!.isNotEmpty)
                     Text(
@@ -250,7 +252,11 @@ class WarungHeader extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.storefront_rounded, size: 18, color: AppTheme.primaryPink),
+              Icon(
+                Icons.storefront_rounded,
+                size: 18,
+                color: AppTheme.primaryPink,
+              ),
               const SizedBox(width: 8),
               Text(
                 'Pilih Warung',
@@ -295,12 +301,20 @@ class WarungHeader extends StatelessWidget {
                         File(warung!.fotoPath!),
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) => Center(
-                          child: Icon(Icons.storefront_rounded, size: 14, color: AppTheme.primaryPink),
+                          child: Icon(
+                            Icons.storefront_rounded,
+                            size: 14,
+                            color: AppTheme.primaryPink,
+                          ),
                         ),
                       ),
                     )
                   : Center(
-                      child: Icon(Icons.storefront_rounded, size: 14, color: AppTheme.primaryPink),
+                      child: Icon(
+                        Icons.storefront_rounded,
+                        size: 14,
+                        color: AppTheme.primaryPink,
+                      ),
                     ),
             ),
             const SizedBox(width: 8),
@@ -311,6 +325,7 @@ class WarungHeader extends StatelessWidget {
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
+                maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),

@@ -180,6 +180,8 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                                     fontWeight: FontWeight.w600,
                                     fontSize: 12,
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
@@ -193,6 +195,8 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                           style: theme.textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ).animate().fadeIn(delay: 100.ms),
 
                         const SizedBox(height: 8),
@@ -347,6 +351,8 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                     color: AppTheme.warningOrange,
                     fontWeight: FontWeight.w500,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
               if (isEmpty) ...[
@@ -357,6 +363,8 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                     color: AppTheme.errorRed,
                     fontWeight: FontWeight.bold,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ],
@@ -472,12 +480,17 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(_barang.nama, style: theme.textTheme.titleMedium),
+                  Text(
+                    _barang.nama,
+                    style: theme.textTheme.titleMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppTheme.lightPink.withOpacity(0.3),
+                      color: AppTheme.lightPink.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -517,10 +530,10 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppTheme.successGreen.withOpacity(0.1),
+                        color: AppTheme.successGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: AppTheme.successGreen.withOpacity(0.3),
+                          color: AppTheme.successGreen.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Column(
@@ -564,7 +577,7 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.1),
+                        color: Colors.grey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Text(
@@ -586,21 +599,32 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                 onPressed: terjual > 0
                     ? () async {
                         final barangProvider = context.read<BarangProvider>();
-                        await barangProvider.updateStok(
+                        final success = await barangProvider.updateStok(
                           _barang,
                           -terjual,
                           catatan:
                               'Terjual $terjual, sisa $sisaStok. Pendapatan: ${CurrencyFormatter.format(totalPendapatan)}',
                         );
-                        _refreshBarang();
 
-                        if (context.mounted) {
+                        if (!context.mounted) {
+                          return;
+                        }
+
+                        if (success) {
+                          _refreshBarang();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
                                 '✅ Penjualan tercatat! Terjual $terjual ${_barang.satuan} = ${CurrencyFormatter.format(totalPendapatan)}',
                               ),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Gagal menyimpan penjualan.'),
                               behavior: SnackBarBehavior.floating,
                             ),
                           );
@@ -656,12 +680,17 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(_barang.nama, style: theme.textTheme.titleMedium),
+                  Text(
+                    _barang.nama,
+                    style: theme.textTheme.titleMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppTheme.lightPink.withOpacity(0.3),
+                      color: AppTheme.lightPink.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -700,10 +729,10 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppTheme.successGreen.withOpacity(0.1),
+                        color: AppTheme.successGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: AppTheme.successGreen.withOpacity(0.3),
+                          color: AppTheme.successGreen.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Column(
@@ -755,20 +784,31 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
                 onPressed: tambah > 0
                     ? () async {
                         final barangProvider = context.read<BarangProvider>();
-                        await barangProvider.updateStok(
+                        final success = await barangProvider.updateStok(
                           _barang,
                           tambah,
                           catatan: 'Tambah stok +$tambah, total $stokBaru',
                         );
-                        _refreshBarang();
 
-                        if (context.mounted) {
+                        if (!context.mounted) {
+                          return;
+                        }
+
+                        if (success) {
+                          _refreshBarang();
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
                                 '✅ Stok bertambah +$tambah ${_barang.satuan}. Total: $stokBaru',
                               ),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Gagal menambah stok.'),
                               behavior: SnackBarBehavior.floating,
                             ),
                           );
@@ -851,31 +891,76 @@ class _DetailBarangScreenState extends State<DetailBarangScreen> {
           ElevatedButton(
             onPressed: () async {
               final barangProvider = context.read<BarangProvider>();
-              final harga =
-                  CurrencyFormatter.parse(hargaController.text) ??
-                  _barang.harga;
-              final stokMin =
-                  int.tryParse(stokMinController.text) ?? _barang.stokMinimum;
-
-              // Update harga if changed
-              if (harga != _barang.harga) {
-                await barangProvider.updateHarga(_barang, harga);
+              final namaBaru = namaController.text.trim();
+              if (namaBaru.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Nama barang tidak boleh kosong.'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+                return;
               }
 
-              // Update other fields
-              final updated = _barang.copyWith(
-                nama: namaController.text.trim(),
-                stokMinimum: stokMin,
-              );
-              await barangProvider.updateBarang(updated);
+              final hargaBaru =
+                  (CurrencyFormatter.parse(hargaController.text) ??
+                          _barang.harga)
+                      .clamp(0, 999999999)
+                      .toInt();
+              final stokMinBaru =
+                  (int.tryParse(stokMinController.text) ?? _barang.stokMinimum)
+                      .clamp(0, 999999)
+                      .toInt();
 
-              _refreshBarang();
+              final isNamaChanged = namaBaru != _barang.nama;
+              final isHargaChanged = hargaBaru != _barang.harga;
+              final isStokMinChanged = stokMinBaru != _barang.stokMinimum;
 
-              if (context.mounted) {
+              if (!isNamaChanged && !isHargaChanged && !isStokMinChanged) {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Tidak ada perubahan.'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+                return;
+              }
+
+              var success = true;
+
+              if (isHargaChanged) {
+                success =
+                    await barangProvider.updateHarga(_barang, hargaBaru) &&
+                    success;
+              }
+
+              if (isNamaChanged || isStokMinChanged) {
+                final updated = _barang.copyWith(
+                  nama: namaBaru,
+                  harga: hargaBaru,
+                  stokMinimum: stokMinBaru,
+                );
+                success = await barangProvider.updateBarang(updated) && success;
+              }
+
+              if (!context.mounted) {
+                return;
+              }
+
+              if (success) {
+                _refreshBarang();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('✅ Barang berhasil diupdate!'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Gagal mengupdate barang.'),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
@@ -981,6 +1066,8 @@ class _InfoCard extends StatelessWidget {
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -1031,6 +1118,8 @@ class _StockActionButton extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: 12,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -1072,11 +1161,15 @@ class _RiwayatItem extends StatelessWidget {
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 if (riwayat.nilaiLama != null || riwayat.nilaiBaru != null)
                   Text(
                     '${riwayat.nilaiLama ?? "-"} → ${riwayat.nilaiBaru ?? "-"}',
                     style: theme.textTheme.bodySmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
               ],
             ),
@@ -1084,6 +1177,8 @@ class _RiwayatItem extends StatelessWidget {
           Text(
             DateFormatter.formatRelative(riwayat.createdAt),
             style: theme.textTheme.bodySmall,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

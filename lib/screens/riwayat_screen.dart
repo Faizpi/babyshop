@@ -256,6 +256,8 @@ class _RiwayatCard extends StatelessWidget {
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     if (barangNama != null)
                       Text(
@@ -274,6 +276,8 @@ class _RiwayatCard extends StatelessWidget {
               Text(
                 DateFormatter.formatTime(riwayat.createdAt),
                 style: theme.textTheme.bodySmall,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -300,19 +304,32 @@ class _RiwayatCard extends StatelessWidget {
     if (riwayat.tipe == TipeRiwayat.editHarga) {
       return Row(
         children: [
-          Text(
-            CurrencyFormatter.format(riwayat.nilaiLama ?? 0),
-            style: theme.textTheme.bodySmall?.copyWith(
-              decoration: TextDecoration.lineThrough,
-              color: AppTheme.textLight,
+          Flexible(
+            child: Text(
+              CurrencyFormatter.format(riwayat.nilaiLama ?? 0),
+              style: theme.textTheme.bodySmall?.copyWith(
+                decoration: TextDecoration.lineThrough,
+                color: AppTheme.textLight,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
             ),
           ),
-          const Text(' → '),
-          Text(
-            CurrencyFormatter.format(riwayat.nilaiBaru ?? 0),
-            style: theme.textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppTheme.successGreen,
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: Text('→'),
+          ),
+          Flexible(
+            child: Text(
+              CurrencyFormatter.format(riwayat.nilaiBaru ?? 0),
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppTheme.successGreen,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
             ),
           ),
         ],
@@ -325,12 +342,26 @@ class _RiwayatCard extends StatelessWidget {
 
     return Row(
       children: [
-        Text('${riwayat.nilaiLama ?? 0}', style: theme.textTheme.bodySmall),
-        const Text(' → '),
-        Text(
-          '${riwayat.nilaiBaru ?? 0}',
-          style: theme.textTheme.bodySmall?.copyWith(
-            fontWeight: FontWeight.w600,
+        Flexible(
+          child: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '${riwayat.nilaiLama ?? 0}',
+                  style: theme.textTheme.bodySmall,
+                ),
+                TextSpan(text: ' → ', style: theme.textTheme.bodySmall),
+                TextSpan(
+                  text: '${riwayat.nilaiBaru ?? 0}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
           ),
         ),
         const SizedBox(width: 8),
@@ -349,6 +380,8 @@ class _RiwayatCard extends StatelessWidget {
               fontWeight: FontWeight.w600,
               color: isIncrease ? AppTheme.successGreen : AppTheme.errorRed,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],

@@ -206,6 +206,8 @@ class _NavItem extends StatelessWidget {
                     ? AppTheme.primaryPink
                     : theme.textTheme.bodySmall?.color,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -243,6 +245,8 @@ class DashboardTab extends StatelessWidget {
                                 return Text(
                                   'Halo, ${userProvider.currentUser?.nama ?? "Bunda"}!',
                                   style: theme.textTheme.titleLarge,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 );
                               },
                             ),
@@ -308,7 +312,8 @@ class DashboardTab extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           // Switch to Barang tab
-                          final homeState = context.findAncestorStateOfType<_HomeScreenState>();
+                          final homeState = context
+                              .findAncestorStateOfType<_HomeScreenState>();
                           homeState?.switchToTab(1);
                         },
                         child: const Text('Lihat Semua'),
@@ -350,8 +355,9 @@ class DashboardTab extends StatelessWidget {
                         ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
-                        if (index >= 6)
+                        if (index >= 6) {
                           return null; // Show only 6 items on dashboard
+                        }
                         final barang = barangProvider.allBarangList[index];
                         final kategori = barangProvider.getKategoriById(
                           barang.kategoriId,
@@ -365,7 +371,8 @@ class DashboardTab extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => DetailBarangScreen(barang: barang),
+                                builder: (_) =>
+                                    DetailBarangScreen(barang: barang),
                               ),
                             );
                           },
@@ -427,7 +434,11 @@ class DashboardTab extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.storefront_rounded, size: 24, color: AppTheme.primaryPink),
+            Icon(
+              Icons.storefront_rounded,
+              size: 24,
+              color: AppTheme.primaryPink,
+            ),
             const SizedBox(width: 8),
             Text('Warung Baru', style: theme.textTheme.titleLarge),
           ],
@@ -506,7 +517,11 @@ class DashboardTab extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  Icon(Icons.warning_amber_rounded, size: 24, color: AppTheme.warningOrange),
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    size: 24,
+                    color: AppTheme.warningOrange,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     'Stok Menipis (${items.length})',
@@ -596,10 +611,14 @@ class _LowStockWarning extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       color: AppTheme.warningOrange,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const Text(
                     'Tap untuk lihat dan restok',
                     style: TextStyle(fontSize: 12, color: AppTheme.textGray),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
@@ -654,6 +673,8 @@ class _LowStockItem extends StatelessWidget {
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
                   isHabis
@@ -663,6 +684,8 @@ class _LowStockItem extends StatelessWidget {
                     fontSize: 12,
                     color: isHabis ? AppTheme.errorRed : AppTheme.warningOrange,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
